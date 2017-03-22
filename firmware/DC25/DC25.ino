@@ -45,7 +45,6 @@ void setup() {
     lineTwoCurrentString = RANDOM;
   }
   lineTwoStop = RANDOM_STOP;
-  Serial.begin(9600);
 }
 
 void loop() {
