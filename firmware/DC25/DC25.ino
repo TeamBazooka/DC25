@@ -9,8 +9,7 @@
 
 #define CUR_CHAR_1 (char*)pgm_read_word(&(strings[lineOneCurrentString])) + ((lineOneCurrentChar - 1) + sizeof(char))
 #define CUR_CHAR_2 (char*)pgm_read_word(&(strings[lineTwoCurrentString])) + ((lineTwoCurrentChar - 1) + sizeof(char))
-//NOTE update this max when more strings are added
-#define RANDOM random(0, 54)
+#define RANDOM random(0, STR_COUNT)
 #define RANDOM_STOP random(4, 9)
 
 LiquidCrystal lcd(2,   3, 4,  5,  6,  7,  8,  9, 10, 11, 12);

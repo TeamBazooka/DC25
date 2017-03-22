@@ -1,3 +1,4 @@
+#define STR_COUNT 55
 const char string1[] PROGMEM = "Make Science Mad Again!";
 const char string2[] PROGMEM = "Are you still there?";
 const char string3[] PROGMEM = "I said across her nose, not up it!";
