@@ -177,17 +177,6 @@ F 3 "" H 3400 1250 50  0000 C CNN
 	1    3400 1250
 	-1   0    0    1   
 $EndComp
-$Comp
-L VFD DIS1
-U 1 1 58C89F6D
-P 3950 850
-F 0 "DIS1" H 4450 900 60  0000 C CNN
-F 1 "VFD" H 3400 900 60  0000 C CNN
-F 2 "footprints:VFD" H 3500 950 60  0001 C CNN
-F 3 "" H 3500 950 60  0001 C CNN
-	1    3950 850 
-	1    0    0    -1  
-$EndComp
 NoConn ~ 3500 1250
 Text Label 800  3700 0    60   ~ 0
 CLK1
@@ -235,25 +224,25 @@ Text Label 4500 1250 3    60   ~ 0
 DB6
 Text Label 4600 1250 3    60   ~ 0
 DB7
-Text Label 2850 2400 0    60   ~ 0
+Text Label 2850 1850 0    60   ~ 0
 RS
-Text Label 2850 2500 0    60   ~ 0
+Text Label 2850 1750 0    60   ~ 0
 RW
-Text Label 2850 2700 0    60   ~ 0
-DB0
-Text Label 2850 2800 0    60   ~ 0
-DB1
-Text Label 2850 2900 0    60   ~ 0
-DB2
-Text Label 2850 3000 0    60   ~ 0
-DB3
-Text Label 2850 3100 0    60   ~ 0
-DB4
-Text Label 2850 800  0    60   ~ 0
-DB5
-Text Label 2850 900  0    60   ~ 0
-DB6
 Text Label 2850 1000 0    60   ~ 0
+DB0
+Text Label 2850 900  0    60   ~ 0
+DB1
+Text Label 2850 800  0    60   ~ 0
+DB2
+Text Label 2850 3100 0    60   ~ 0
+DB3
+Text Label 2850 3000 0    60   ~ 0
+DB4
+Text Label 2850 2900 0    60   ~ 0
+DB5
+Text Label 2850 2800 0    60   ~ 0
+DB6
+Text Label 2850 2700 0    60   ~ 0
 DB7
 $Comp
 L WS2812B LED2
@@ -301,10 +290,10 @@ F 3 "" V 7350 5300 60  0000 C CNN
 $EndComp
 Text Label 10300 5100 0    60   ~ 0
 RGB1
-Text Label 2850 1650 0    60   ~ 0
+Text Label 2850 2400 0    60   ~ 0
 RGB1
-NoConn ~ 2850 1750
-NoConn ~ 2850 1850
+NoConn ~ 2850 2500
+NoConn ~ 2850 2500
 NoConn ~ 2850 1950
 NoConn ~ 2850 2050
 $Comp
@@ -388,7 +377,7 @@ Wire Wire Line
 	600  1700 600  1600
 Wire Wire Line
 	850  3000 950  3000
-Text Label 2850 2600 0    60   ~ 0
+Text Label 2850 1650 0    60   ~ 0
 E
 NoConn ~ 2850 2150
 $Comp
@@ -691,4 +680,15 @@ NoConn ~ 950  2250
 Wire Wire Line
 	950  900  800  900 
 Connection ~ 800  900 
+$Comp
+L VFD DIS1
+U 1 1 58D4713E
+P 3950 850
+F 0 "DIS1" H 4450 900 60  0000 C CNN
+F 1 "VFD" H 3400 900 60  0000 C CNN
+F 2 "" H 3500 950 60  0001 C CNN
+F 3 "" H 3500 950 60  0001 C CNN
+	1    3950 850 
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
