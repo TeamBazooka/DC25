@@ -4,11 +4,11 @@
 #include "buffer.h"
 #include "strings.h"
 
+#define SIZECHAR 1
+
 #define COLUMNS 16
 #define DELAY 150
 
-#define CUR_CHAR_1 (char*)pgm_read_word(&(strings[lineOneCurrentString])) + ((lineOneCurrentChar - 1) + sizeof(char))
-#define CUR_CHAR_2 (char*)pgm_read_word(&(strings[lineTwoCurrentString])) + ((lineTwoCurrentChar - 1) + sizeof(char))
 #define RANDOM random(0, STR_COUNT)
 #define RANDOM_STOP random(4, 9)
 
@@ -16,95 +16,79 @@ LiquidCrystal lcd(2,   3, 4,  5,  6,  7,  8,  9, 10, 11, 12);
 
 const char space = ' ';
 
-int lineOneCurrentString = 0;
-int lineOneCurrentChar = 0;
-int lineTwoCurrentString = 0;
-int lineTwoCurrentChar = 0;
-int lineOneStop = 0;
-int lineTwoStop = 0;
+typedef struct LineInfo {
+    int str;
+    int ch;
+    int stop;
+    CircularBuffer *cb;
+} LineInfo;
 
-circular_buffer *LineOne;
-circular_buffer *LineTwo;
+LineInfo *lineOne;
+LineInfo *lineTwo;
 
 void setup() {
-  randomSeed(analogRead(0));
+  randomSeed(0xCAFEF00D);
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
+  
+  lineOne = (LineInfo *) malloc(sizeof(LineInfo));
+  lineTwo = (LineInfo *) malloc(sizeof(LineInfo));
 
-  size_t charSize = sizeof(char);
-  LineOne = cb_init(COLUMNS, charSize);
-  LineTwo = cb_init(COLUMNS, charSize);
+  lineOne->cb = cbInit(COLUMNS, SIZECHAR);
+  lineTwo->cb = cbInit(COLUMNS, SIZECHAR);
 
   for(int ii=0;ii<16;ii++) {
-    cb_push(LineOne, &space);
-    cb_push(LineTwo, &space);
+    cbPush(lineOne->cb, &space);
+    cbPush(lineTwo->cb, &space);
   }
-  lineOneCurrentString = RANDOM;
-  lineTwoCurrentString = RANDOM;
-  while(lineOneCurrentString == lineTwoCurrentString) {
-    lineTwoCurrentString = RANDOM;
+  lineOne->str = RANDOM;
+  lineTwo->str = RANDOM;
+  while(lineOne->str == lineTwo->str) {
+    lineTwo->str = RANDOM;
   }
-  lineTwoStop = RANDOM_STOP;
+  lineTwo->stop = RANDOM_STOP;
+}
+
+void incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
+  char thisChar;
+  if(currentLine->stop != 0) {
+    currentLine->stop--;
+    cbPush(currentLine->cb, &space);
+  } else {
+    memcpy_P(&thisChar, strings[currentLine->str] + (currentLine->ch * SIZECHAR), SIZECHAR);
+    if(thisChar != '\0') {
+      cbPush(currentLine->cb, &thisChar);
+      currentLine->ch++;
+    } else {
+      currentLine->str = RANDOM;
+      while(currentLine->str == prevLine->str) {
+        currentLine->str = RANDOM;
+      }
+      currentLine->stop = RANDOM_STOP;
+      currentLine->ch = 0;
+      cbPush(currentLine->cb, &space);
+    }
+  }
 }
 
 void loop() {
-  char thisChar;
-  char *ptrThisChar;
+   incrementLine(lineOne, lineTwo);
+   incrementLine(lineTwo, lineOne);
 
-  if(lineOneStop != 0) {
-    lineOneStop--;
-    cb_push(LineOne, &space);
-  } else {
-    ptrThisChar = CUR_CHAR_1;
-    memcpy_P(&thisChar, ptrThisChar, sizeof(char));
-    if(thisChar != '\0') {
-      cb_push(LineOne, &thisChar);
-      lineOneCurrentChar++;
-    } else {
-      lineOneCurrentString = RANDOM;
-      while(lineOneCurrentString == lineTwoCurrentString) {
-        lineOneCurrentString = RANDOM;
-      }
-      lineOneStop = RANDOM_STOP;
-      lineOneCurrentChar=0;
-      cb_push(LineOne, &space);
-    }
-  }
-
-  if(lineTwoStop != 0) {
-    lineTwoStop--;
-    cb_push(LineTwo, &space);
-  } else {
-    ptrThisChar = CUR_CHAR_2;
-    memcpy_P(&thisChar, ptrThisChar, sizeof(char));
-    if(thisChar != '\0') {
-      cb_push(LineTwo, &thisChar);
-      lineTwoCurrentChar++;
-    } else {
-      lineTwoCurrentString = RANDOM;
-      while(lineOneCurrentString == lineTwoCurrentString) {
-        lineTwoCurrentString = RANDOM;
-      }
-      lineTwoStop = RANDOM_STOP;
-      lineTwoCurrentChar=0;
-      cb_push(LineTwo, &space);
-    }
-  }
-
-  char *currentColOne = LineOne->head;
-  char *currentColTwo = LineTwo->head;
+  char *currentColOne = lineOne->cb->head;
+  char *currentColTwo = lineTwo->cb->head;
   for(int ii = 0; ii<COLUMNS;ii++) {
     lcd.setCursor(ii, 0);
     lcd.write(*currentColOne);
     lcd.setCursor(ii, 1);
     lcd.write(*currentColTwo);
-    currentColOne = (char*) currentColOne + LineOne->sz;
-    currentColTwo = (char*) currentColTwo + LineTwo->sz;
-    if(currentColOne == LineOne->buffer_end) {
-      currentColOne = LineOne->buffer;
+    currentColOne = (char*) currentColOne + lineOne->cb->sz;
+    currentColTwo = (char*) currentColTwo + lineTwo->cb->sz;
+    if(currentColOne == lineOne->cb->bufferEnd) {
+      currentColOne = lineOne->cb->buffer;
     }
-    if(currentColTwo == LineTwo->buffer_end) {
-      currentColTwo = LineTwo->buffer;
+    if(currentColTwo == lineTwo->cb->bufferEnd) {
+      currentColTwo = lineTwo->cb->buffer;
     }
   }
   delay(DELAY);

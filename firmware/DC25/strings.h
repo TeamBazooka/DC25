@@ -55,7 +55,7 @@ const char string53[] PROGMEM = "WHAT? You went over my helmet?";
 const char string54[] PROGMEM = "They've gone to plaid.";
 const char string55[] PROGMEM = "1 2 3 4 5? That's amazing! I've got the same combination on my luggage!";
 
-const char* const strings[] PROGMEM = {
+const char* const strings[] = {
   string1,
   string2,
   string3,
