@@ -290,10 +290,8 @@ F 3 "" V 7350 5300 60  0000 C CNN
 $EndComp
 Text Label 10300 5100 0    60   ~ 0
 RGB1
-Text Label 2850 2400 0    60   ~ 0
+Text Label 2850 2600 0    60   ~ 0
 RGB1
-NoConn ~ 2850 2500
-NoConn ~ 2850 2500
 NoConn ~ 2850 1950
 NoConn ~ 2850 2050
 $Comp
@@ -691,4 +689,69 @@ F 3 "" H 3500 950 60  0001 C CNN
 	1    3950 850 
 	1    0    0    -1  
 $EndComp
+Text Label 2850 2400 0    60   ~ 0
+RX
+Text Label 2850 2500 0    60   ~ 0
+TX
+$Comp
+L CONN_01X04 P1
+U 1 1 58D6E005
+P 4650 1850
+F 0 "P1" H 4650 2100 50  0000 C CNN
+F 1 "CONN_01X04" V 4750 1850 50  0000 C CNN
+F 2 "Pin_Headers:Pin_Header_Straight_1x04_Pitch2.54mm" H 4650 1850 50  0001 C CNN
+F 3 "" H 4650 1850 50  0000 C CNN
+	1    4650 1850
+	0    -1   -1   0   
+$EndComp
+$Comp
+L +5V #PWR?
+U 1 1 58D6E00B
+P 4350 2200
+F 0 "#PWR?" H 4350 2050 50  0001 C CNN
+F 1 "+5V" H 4350 2340 50  0000 C CNN
+F 2 "" H 4350 2200 50  0000 C CNN
+F 3 "" H 4350 2200 50  0000 C CNN
+	1    4350 2200
+	-1   0    0    1   
+$EndComp
+$Comp
+L GND #PWR?
+U 1 1 58D6E011
+P 4550 2200
+F 0 "#PWR?" H 4550 1950 50  0001 C CNN
+F 1 "GND" H 4550 2050 50  0000 C CNN
+F 2 "" H 4550 2200 50  0000 C CNN
+F 3 "" H 4550 2200 50  0000 C CNN
+	1    4550 2200
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4750 2200 4750 2150
+Wire Wire Line
+	4750 2150 4700 2150
+Wire Wire Line
+	4700 2150 4700 2050
+Wire Wire Line
+	4550 2200 4550 2150
+Wire Wire Line
+	4550 2150 4600 2150
+Wire Wire Line
+	4600 2150 4600 2050
+Wire Wire Line
+	4500 2050 4500 2100
+Wire Wire Line
+	4500 2100 4350 2100
+Wire Wire Line
+	4350 2100 4350 2200
+Wire Wire Line
+	4800 2050 4800 2100
+Wire Wire Line
+	4800 2100 5000 2100
+Wire Wire Line
+	5000 2100 5000 2200
+Text Label 5000 2200 0    60   ~ 0
+TX
+Text Label 4750 2200 0    60   ~ 0
+RX
 $EndSCHEMATC
