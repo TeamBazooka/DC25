@@ -9,15 +9,7 @@ typedef struct CircularBuffer {
     char *head;       // pointer to head
 } CircularBuffer;
 
-CircularBuffer* cbInit(size_t capacity, size_t sz) {
-  size_t buffer_size = (capacity + 1) * sz;
-  CircularBuffer *cb = (CircularBuffer*) malloc(sizeof(CircularBuffer));
-  cb->buffer = (char*) malloc(buffer_size);
-  cb->bufferEnd = cb->buffer + buffer_size;
-  cb->sz = sz;
-  cb->head = cb->buffer;
-  return cb;
-}
+const char space = ' ';
 
 void cbPush(CircularBuffer *cb, const char *item) {
   memcpy(cb->head, item, cb->sz);
@@ -26,5 +18,20 @@ void cbPush(CircularBuffer *cb, const char *item) {
     cb->head = cb->buffer;
 }
 
-#endif
+void cbPush(CircularBuffer *cb) {
+  cbPush(cb, &space);
+}
 
+CircularBuffer* cbInit(size_t capacity, size_t sz) {
+  size_t buffer_size = capacity * sz;
+  CircularBuffer *cb = (CircularBuffer*) malloc(sizeof(CircularBuffer));
+  cb->buffer = (char*) malloc(buffer_size);
+  cb->bufferEnd = cb->buffer + buffer_size;
+  cb->sz = sz;
+  cb->head = cb->buffer;
+  for(size_t ii=0;ii<capacity;ii++)
+    cbPush(cb);
+  return cb;
+}
+
+#endif

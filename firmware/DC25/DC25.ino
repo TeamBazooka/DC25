@@ -7,6 +7,7 @@
 #define SIZECHAR 1
 
 #define COLUMNS 16
+#define ROWS 2
 #define DELAY 150
 
 #define RANDOM random(0, STR_COUNT)
@@ -14,28 +15,16 @@
 
 LiquidCrystal lcd(2,   3, 4,  5,  6,  7,  8,  9, 10, 11, 12);
 
-const char space = ' ';
-
 LineInfo *lineOne;
 LineInfo *lineTwo;
 
 void setup() {
   randomSeed(0xCAFEF00D);
   // set up the LCD's number of columns and rows:
-  lcd.begin(16, 2);
+  lcd.begin(COLUMNS, ROWS);
 
-  lineOne = liInit();
-  lineTwo = liInit();
-
-  lineOne->cb = cbInit(COLUMNS, SIZECHAR);
-  lineTwo->cb = cbInit(COLUMNS, SIZECHAR);
-
-  for(int ii=0;ii<16;ii++) {
-    cbPush(lineOne->cb, &space);
-    cbPush(lineTwo->cb, &space);
-  }
-  lineOne->str = RANDOM;
-  lineTwo->str = RANDOM;
+  lineOne = liInit(COLUMNS, SIZECHAR, RANDOM);
+  lineTwo = liInit(COLUMNS, SIZECHAR, RANDOM);
   while(lineOne->str == lineTwo->str) {
     lineTwo->str = RANDOM;
   }
@@ -46,7 +35,7 @@ void incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
   char thisChar;
   if(currentLine->stop != 0) {
     currentLine->stop--;
-    cbPush(currentLine->cb, &space);
+    cbPush(currentLine->cb);
   } else {
     memcpy_P(&thisChar, strings[currentLine->str] + (currentLine->ch * SIZECHAR), SIZECHAR);
     if(thisChar != '\0') {
@@ -59,7 +48,7 @@ void incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
       }
       currentLine->stop = RANDOM_STOP;
       currentLine->ch = 0;
-      cbPush(currentLine->cb, &space);
+      cbPush(currentLine->cb);
     }
   }
 }

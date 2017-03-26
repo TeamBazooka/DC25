@@ -11,8 +11,11 @@ typedef struct LineInfo {
   CircularBuffer *cb;
 } LineInfo;
 
-LineInfo *liInit() {
-  return (LineInfo *) malloc(sizeof(LineInfo));
+LineInfo *liInit(size_t columns, size_t sz, int initStr) {
+  LineInfo *li = (LineInfo *) malloc(sizeof(LineInfo));
+  li->cb = cbInit(columns, sz);
+  li->str = initStr;
+  return li;
 }
 
 #endif
