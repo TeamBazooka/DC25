@@ -1,3 +1,7 @@
+
+#ifndef __BUFFER_H
+#define __BUFFER_H
+
 typedef struct CircularBuffer {
     char *buffer;     // data buffer
     char *bufferEnd; // end of data buffer
@@ -21,4 +25,6 @@ void cbPush(CircularBuffer *cb, const char *item) {
   if(cb->head == cb->bufferEnd)
     cb->head = cb->buffer;
 }
+
+#endif
 

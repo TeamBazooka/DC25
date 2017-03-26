@@ -1,3 +1,7 @@
+
+#ifndef __STRINGS_H
+#define __STRINGS_H
+
 #define STR_COUNT 55
 const char string1[] PROGMEM = "Make Science Mad Again!";
 const char string2[] PROGMEM = "Are you still there?";
@@ -112,4 +116,7 @@ const char* const strings[] = {
   string54,
   string55
 };
+
+#endif
+
 

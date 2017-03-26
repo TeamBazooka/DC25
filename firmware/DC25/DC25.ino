@@ -1,8 +1,8 @@
 #include <LiquidCrystal.h>
 #include <Adafruit_NeoPixel.h>
 
-#include "buffer.h"
 #include "strings.h"
+#include "line_info.h"
 
 #define SIZECHAR 1
 
@@ -16,13 +16,6 @@ LiquidCrystal lcd(2,   3, 4,  5,  6,  7,  8,  9, 10, 11, 12);
 
 const char space = ' ';
 
-typedef struct LineInfo {
-    int str;
-    int ch;
-    int stop;
-    CircularBuffer *cb;
-} LineInfo;
-
 LineInfo *lineOne;
 LineInfo *lineTwo;
 
@@ -30,9 +23,9 @@ void setup() {
   randomSeed(0xCAFEF00D);
   // set up the LCD's number of columns and rows:
   lcd.begin(16, 2);
-  
-  lineOne = (LineInfo *) malloc(sizeof(LineInfo));
-  lineTwo = (LineInfo *) malloc(sizeof(LineInfo));
+
+  lineOne = liInit();
+  lineTwo = liInit();
 
   lineOne->cb = cbInit(COLUMNS, SIZECHAR);
   lineTwo->cb = cbInit(COLUMNS, SIZECHAR);
@@ -91,6 +84,5 @@ void loop() {
       currentColTwo = lineTwo->cb->buffer;
     }
   }
-  delay(DELAY);
+   delay(DELAY);
 }
-
