@@ -2,7 +2,7 @@
 #ifndef __STRINGS_H
 #define __STRINGS_H
 
-#define STR_COUNT 55
+#define STR_COUNT 62
 const char string1[] PROGMEM = "Make Science Mad Again!";
 const char string2[] PROGMEM = "Are you still there?";
 const char string3[] PROGMEM = "I said across her nose, not up it!";
@@ -58,6 +58,13 @@ const char string52[] PROGMEM = "How many ass holes do we have on this ship anyh
 const char string53[] PROGMEM = "WHAT? You went over my helmet?";
 const char string54[] PROGMEM = "They've gone to plaid.";
 const char string55[] PROGMEM = "1 2 3 4 5? That's amazing! I've got the same combination on my luggage!";
+const char string56[] PROGMEM = "So long, and thanks for all the fish.";
+const char string57[] PROGMEM = "---***---***---***---***---***---***---***---***---***---***---***---***---";
+const char string58[] PROGMEM = "---___---___---___---___---___---___---___---___---___---___---___---___---";
+const char string59[] PROGMEM = "///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///";
+const char string60[] PROGMEM = ")))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))";
+const char string61[] PROGMEM = "---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---";
+const char string62[] PROGMEM = "]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]]";
 
 const char* const strings[] = {
   string1,
@@ -114,7 +121,14 @@ const char* const strings[] = {
   string52,
   string53,
   string54,
-  string55
+  string55,
+  string56,
+  string57,
+  string58,
+  string59,
+  string60,
+  string61,
+  string62
 };
 
 #endif
