@@ -2,7 +2,8 @@
 #ifndef __STRINGS_H
 #define __STRINGS_H
 
-#define STR_COUNT 62
+#define STR_COUNT 63
+#define FSLASH (char) 0x8c
 const char string1[] PROGMEM = "Make Science Mad Again!";
 const char string2[] PROGMEM = "Are you still there?";
 const char string3[] PROGMEM = "I said across her nose, not up it!";
@@ -61,7 +62,7 @@ const char string55[] PROGMEM = "1 2 3 4 5? That's amazing! I've got the same co
 const char string56[] PROGMEM = "So long, and thanks for all the fish.";
 const char string57[] PROGMEM = "---***---***---***---***---***---***---***---***---***---***---***---***---";
 const char string58[] PROGMEM = "---___---___---___---___---___---___---___---___---___---___---___---___---";
-const char string59[] PROGMEM = "///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///\\\\\\///";
+const char string59[] PROGMEM = {'/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', FSLASH, FSLASH, FSLASH, '/', '/', '/', '\0'};
 const char string60[] PROGMEM = ")))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))((()))";
 const char string61[] PROGMEM = "---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---|||---";
 const char string62[] PROGMEM = "]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]][[[]]]";
@@ -132,5 +133,3 @@ const char* const strings[] = {
 };
 
 #endif
-
-

@@ -1,3 +1,6 @@
+
+#include "Arduino.h"
+
 #include <LiquidCrystal.h>
 #include <Adafruit_NeoPixel.h>
 
@@ -25,9 +28,9 @@ void setup() {
 
   lineOne = liInit(COLUMNS, SIZECHAR, RANDOM);
   lineTwo = liInit(COLUMNS, SIZECHAR, RANDOM);
-  while(lineOne->str == lineTwo->str) {
-    lineTwo->str = RANDOM;
-  }
+//  while(lineOne->str == lineTwo->str) {
+//    lineTwo->str = RANDOM;
+//  }
   lineTwo->stop = RANDOM_STOP;
 }
 
