@@ -1,3 +1,6 @@
 [submodule "firmware/arduino-cmake"]
 	path = firmware/arduino-cmake
 	url = https://github.com/iceseyes/arduino-cmake/
+[submodule "firmware/libraries/Adafruit_NeoPixel"]
+	path = firmware/libraries/Adafruit_NeoPixel
+	url = https://github.com/adafruit/Adafruit_NeoPixel
