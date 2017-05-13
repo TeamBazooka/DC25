@@ -1,3 +1,0 @@
-[submodule "firmware/libraries/LiquidCrystal"]
-	path = firmware/lib/LiquidCrystal
-	url = https://github.com/TeamBazooka/Arduino_LiquidCrystal
