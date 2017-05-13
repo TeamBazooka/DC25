@@ -1,6 +1,6 @@
 #define NEED_CXX_BITS
-#include <Adafruit_NeoPixel.h>
 #include <LiquidCrystal.h>
+#include <Arduino_FreeRTOS.h>
 
 #include "strings.h"
 #include "line_info.h"
@@ -20,15 +20,14 @@
 
 LiquidCrystal *lcd;
 
-Adafruit_NeoPixel *leds;
-
 LineInfo *lineOne;
 LineInfo *lineTwo;
 
 RgbAnimations *animations;
 unsigned int rgbDelay = 50;
-unsigned long last_time_lcd;
-unsigned long last_time_rgb;
+
+void run_lcd(void *pvParameters);
+void run_rgb(void *pvParameters);
 
 void setup() {
   randomSeed(0xCAFEF00D);
@@ -45,13 +44,24 @@ void setup() {
   }
   lineTwo->stop = RANDOM_STOP;
 
-  leds = new Adafruit_NeoPixel(RGB_LED_COUNT, RGB_LED_PIN, NEO_GRB + NEO_KHZ800);
+  animations = new RgbAnimations();
+  animations->selectAnimation(false);
 
-  animations = new RgbAnimations(leds, RGB_LED_COUNT);
-  animations->selectAnimation();
-
-  last_time_lcd = millis();
-  last_time_rgb = millis();
+  // xTaskCreate(
+  //     run_lcd
+  //     ,  (const portCHAR *)"LCD"   // A name just for humans
+  //     ,  128  // Stack size
+  //     ,  NULL
+  //     ,  2  // priority
+  //     ,  NULL );
+  //
+  xTaskCreate(
+      run_rgb
+      ,  (const portCHAR *)"RGB"   // A name just for humans
+      ,  128  // Stack size
+      ,  NULL
+      ,  1  // priority
+      ,  NULL );
 }
 
 void incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
@@ -98,17 +108,21 @@ void writeToLcd() {
   }
 }
 
-void loop() {
-  unsigned long now = millis();
-  if ((now - last_time_lcd) >= LCD_DELAY) {
-    //writeToLcd();
-    last_time_lcd = now;
+void run_lcd(void *pvParameters) {
+  while(1) {
+    writeToLcd();
+    vTaskDelay( LCD_DELAY / portTICK_PERIOD_MS );
   }
-  if ((now - last_time_rgb) >= rgbDelay) {
-    bool select = animations->run();
+}
+
+void run_rgb(void *pvParameters) {
+  while(1) {
+    bool select = animations->run(false);
     if(select) {
       rgbDelay = random(50, 250);
     }
-    last_time_rgb = now;
+    vTaskDelay( rgbDelay / portTICK_PERIOD_MS );
   }
 }
+
+void loop() { ; }
