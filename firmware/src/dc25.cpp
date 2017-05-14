@@ -3,7 +3,6 @@
 #include "RgbAnimations.h"
 #include "Lcd.h"
 
-#define LCD_DELAY 250
 Lcd *lcd;
 
 RgbAnimations *animations;
@@ -15,21 +14,14 @@ long lcdTime;
 void setup() {
   randomSeed(0xCAFEF00D);
 
-  animations = new RgbAnimations();
-  lcd = new Lcd();
-  lcdTime = rgbTime = millis();
+  long now = millis();
+
+  animations = new RgbAnimations(now);
+  lcd = new Lcd(now);
 }
 
 void loop() {
   long now = millis();
-  if(now - rgbTime >= rgbDelay) {
-    rgbTime = now;
-    if(animations->run()) {
-      rgbDelay = random(50, 250);
-    }
-  }
-  if(now - lcdTime >= LCD_DELAY) {
-    lcdTime = now;
-    lcd->run();
-  }
+  animations->run(now);
+  lcd->run(now);
 }

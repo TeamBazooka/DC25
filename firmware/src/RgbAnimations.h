@@ -19,6 +19,8 @@
 
 class RgbAnimations {
   private:
+  long time;
+  uint8_t delay;
   unsigned int currentAnimation;
   unsigned int currentPixel;
   unsigned int ledCount;
@@ -64,9 +66,9 @@ class RgbAnimations {
   bool theaterChase();
   bool theaterChaseRainbow();
   public:
-  RgbAnimations();
+  RgbAnimations(long now);
   void selectAnimation();
-  bool run();
+  void run(long now);
 };
 
 #endif

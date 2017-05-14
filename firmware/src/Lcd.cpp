@@ -1,7 +1,8 @@
 
 #include "Lcd.h"
 
-Lcd::Lcd() {
+Lcd::Lcd(long now) {
+  this->time = now;
   this->lcd = new LiquidCrystal(16, 15, 14, 10, 9, 8, 7, 6, 5, 4, 3);
   // set up the LCD's number of columns and rows:
   this->lcd->begin(COLUMNS, ROWS);
@@ -37,24 +38,27 @@ void Lcd::incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
   }
 }
 
-void Lcd::run() {
-  this->incrementLine(this->lineOne, this->lineTwo);
-  this->incrementLine(this->lineTwo, this->lineOne);
+void Lcd::run(long now) {
+  if(now - this->time >= LCD_DELAY) {
+    this->time = now;
+    this->incrementLine(this->lineOne, this->lineTwo);
+    this->incrementLine(this->lineTwo, this->lineOne);
 
-  char *currentColOne = this->lineOne->cb->head;
-  char *currentColTwo = this->lineTwo->cb->head;
-  for(int ii = 0; ii<COLUMNS;ii++) {
-    this->lcd->setCursor(ii, 0);
-    this->lcd->write(*currentColOne);
-    this->lcd->setCursor(ii, 1);
-    this->lcd->write(*currentColTwo);
-    currentColOne = (char*) currentColOne + this->lineOne->cb->sz;
-    currentColTwo = (char*) currentColTwo + this->lineTwo->cb->sz;
-    if(currentColOne == this->lineOne->cb->bufferEnd) {
-      currentColOne = this->lineOne->cb->buffer;
-    }
-    if(currentColTwo == this->lineTwo->cb->bufferEnd) {
-      currentColTwo = this->lineTwo->cb->buffer;
+    char *currentColOne = this->lineOne->cb->head;
+    char *currentColTwo = this->lineTwo->cb->head;
+    for(int ii = 0; ii<COLUMNS;ii++) {
+      this->lcd->setCursor(ii, 0);
+      this->lcd->write(*currentColOne);
+      this->lcd->setCursor(ii, 1);
+      this->lcd->write(*currentColTwo);
+      currentColOne = (char*) currentColOne + this->lineOne->cb->sz;
+      currentColTwo = (char*) currentColTwo + this->lineTwo->cb->sz;
+      if(currentColOne == this->lineOne->cb->bufferEnd) {
+        currentColOne = this->lineOne->cb->buffer;
+      }
+      if(currentColTwo == this->lineTwo->cb->bufferEnd) {
+        currentColTwo = this->lineTwo->cb->buffer;
+      }
     }
   }
 }

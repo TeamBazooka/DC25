@@ -15,13 +15,16 @@
 #define RANDOM random(0, STR_COUNT)
 #define RANDOM_STOP random(4, 9)
 
+#define LCD_DELAY 250
+
 class Lcd {
 public:
-  Lcd();
-  void run();
+  Lcd(long now);
+  void run(long now);
 
 
 private:
+  long time;
   void incrementLine(LineInfo *currentLine, LineInfo *prevLine);
   LineInfo *lineOne;
   LineInfo *lineTwo;

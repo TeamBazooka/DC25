@@ -1,7 +1,8 @@
 
 #include "RgbAnimations.h"
 
-RgbAnimations::RgbAnimations() {
+RgbAnimations::RgbAnimations(long now) {
+  this->time = now;
   pinMode(DIGITAL_PIN,OUTPUT);
   digitalWrite(DIGITAL_PIN,0);
   if((this->rgb_arr = (uint8_t *)malloc(NUM_BYTES))) {
@@ -141,6 +142,7 @@ void RgbAnimations::selectAnimation() {
   this->currentPixel = 0;
   this->blankPixels = false;
   this->counter = 10;
+  this->delay = random(50, 250);
 }
 
 bool RgbAnimations::race() {
@@ -234,39 +236,40 @@ uint32_t RgbAnimations::wheel(byte WheelPos) {
   return COLOR(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 
-bool RgbAnimations::run() {
-  bool result = false;
-  switch(this->currentAnimation) {
-    case 0:
-      result = this->race();
+void RgbAnimations::run(long now) {
+  if(now - this->time >= this->delay) {
+    this->time = now;
+    bool result = false;
+    switch(this->currentAnimation) {
+      case 0:
+        result = this->race();
+        break;
+      case 1:
+        result = this->circle();
+        break;
+      case 2:
+        result = this->bounceCircle();
+        break;
+      case 3:
+        result = this->circleColor();
+        break;
+      case 4:
+      case 5:
+      case 6:
+      case 7:
+      case 8:
+      case 9:
+      case 10:
+      case 11:
+      case 12:
+      case 13:
+      case 14:
+      case 15:
       break;
-    case 1:
-      result = this->circle();
-      break;
-    case 2:
-      result = this->bounceCircle();
-      break;
-    case 3:
-      result = this->circleColor();
-      break;
-    case 4:
-    case 5:
-    case 6:
-    case 7:
-    case 8:
-    case 9:
-    case 10:
-    case 11:
-    case 12:
-    case 13:
-    case 14:
-    case 15:
-    break;
+    }
+    this->render();
+    if(result) {
+      this->selectAnimation();
+    }
   }
-  this->render();
-  if(result) {
-    this->selectAnimation();
-  }
-  //this->select
-  return result;
 }
