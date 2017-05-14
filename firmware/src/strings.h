@@ -2,6 +2,8 @@
 #ifndef __STRINGS_H
 #define __STRINGS_H
 
+#include <Arduino.h>
+
 #define STR_COUNT 62
 #define FSLASH (char) 0x8c
 const char string1[] PROGMEM = "Make Science Mad Again!";
