@@ -15,9 +15,6 @@
 #define RANDOM random(0, STR_COUNT)
 #define RANDOM_STOP random(4, 9)
 
-#define RGB_LED_PIN PD2
-#define RGB_LED_COUNT 8
-
 LiquidCrystal *lcd;
 
 LineInfo *lineOne;
@@ -26,13 +23,13 @@ LineInfo *lineTwo;
 RgbAnimations *animations;
 unsigned int rgbDelay = 50;
 
-void run_lcd(void *pvParameters);
-void run_rgb(void *pvParameters);
+long rgbTime;
+long lcdTime;
 
 void setup() {
   randomSeed(0xCAFEF00D);
   //                       RS,  RW,   E,  D0,  D1,  D2, D3, D4, D5, D6, D7
-  lcd = new LiquidCrystal(PC2, PC1, PC0, PB2, PB1, PB0, PD7, PD6, PD5, PD4, PD3);
+  lcd = new LiquidCrystal(16, 15, 14, 10, 9, 8, 7, 6, 5, 4, 3);
   //lcd = new LiquidCrystal(2,  3, 4,  5,  6,  7,  8,  9, 10, 11, 12);
   // set up the LCD's number of columns and rows:
   lcd->begin(COLUMNS, ROWS);
@@ -42,26 +39,11 @@ void setup() {
   while(lineOne->str == lineTwo->str) {
     lineTwo->str = RANDOM;
   }
-  lineTwo->stop = RANDOM_STOP;
+  lineTwo->stop = 25;
+  lineOne->stop = 20;
 
   animations = new RgbAnimations();
-  animations->selectAnimation(false);
-
-  // xTaskCreate(
-  //     run_lcd
-  //     ,  (const portCHAR *)"LCD"   // A name just for humans
-  //     ,  128  // Stack size
-  //     ,  NULL
-  //     ,  2  // priority
-  //     ,  NULL );
-  //
-  xTaskCreate(
-      run_rgb
-      ,  (const portCHAR *)"RGB"   // A name just for humans
-      ,  128  // Stack size
-      ,  NULL
-      ,  1  // priority
-      ,  NULL );
+  lcdTime = rgbTime = millis();
 }
 
 void incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
@@ -108,21 +90,16 @@ void writeToLcd() {
   }
 }
 
-void run_lcd(void *pvParameters) {
-  while(1) {
-    writeToLcd();
-    vTaskDelay( LCD_DELAY / portTICK_PERIOD_MS );
-  }
-}
-
-void run_rgb(void *pvParameters) {
-  while(1) {
-    bool select = animations->run(false);
-    if(select) {
+void loop() {
+  long now = millis();
+  if(now - rgbTime >= rgbDelay) {
+    rgbTime = now;
+    if(animations->run()) {
       rgbDelay = random(50, 250);
     }
-    vTaskDelay( rgbDelay / portTICK_PERIOD_MS );
+  }
+  if(now - lcdTime >= LCD_DELAY) {
+    lcdTime = now;
+    writeToLcd();
   }
 }
-
-void loop() { ; }

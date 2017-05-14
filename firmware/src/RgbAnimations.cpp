@@ -9,7 +9,7 @@ RgbAnimations::RgbAnimations() {
   }
   this->render();
 
-  this->selectAnimation(false);
+  this->selectAnimation();
   this->ledCount = NUM_RGB;
 }
 
@@ -18,8 +18,25 @@ void RgbAnimations::setColorRGB(uint8_t idx, uint8_t *color) {
     uint8_t *p = &rgb_arr[idx*3];
     *p++ = *color;
     *p++ = *(color + 1);
-    *p = *(color);
+    *p = *(color + 2);
   }
+}
+
+void RgbAnimations::setColorRGBInt(uint8_t idx, uint32_t color) {
+  if(idx < NUM_RGB) {
+    uint8_t *p = &rgb_arr[idx*3];
+    *p++ = COLOR_R(color);
+    *p++ = COLOR_G(color);
+    *p   = COLOR_B(color);
+  }
+}
+
+uint32_t RgbAnimations::readColorRGBInt(uint8_t idx) {
+  if(idx < NUM_RGB) {
+    uint8_t *p = &rgb_arr[idx*3];
+    return COLOR(*(p), *(p+1), *(p+2));
+  }
+  return 0;
 }
 
 void RgbAnimations::render() {
@@ -107,14 +124,20 @@ void RgbAnimations::render() {
                                   // function.
 }
 
-void RgbAnimations::selectColor(bool debug) {
-  memcpy(this->currentColor, this->colors[random(0, 16)], 3);
+void RgbAnimations::selectColor() {
+  int firstColor = random(0, 16);
+  int secondColor = random(0, 16);
+  while(firstColor == secondColor) {
+    secondColor = random(0, 16);
+  }
+  memcpy(this->currentColor, this->colors[firstColor], 3);
+  memcpy(this->backgroundColor, this->colors[secondColor], 3);
   memcpy(this->paintingColor, this->currentColor, 3);
 }
 
-void RgbAnimations::selectAnimation(bool debug) {
-  this->currentAnimation = random(0, 16);
-  this->selectColor(debug);
+void RgbAnimations::selectAnimation() {
+  this->currentAnimation = random(0, 4);
+  this->selectColor();
   this->currentPixel = 0;
   this->blankPixels = false;
   this->counter = 10;
@@ -127,7 +150,7 @@ bool RgbAnimations::race() {
   if(this->currentPixel == this->ledCount) {
     this->currentPixel = 0;
     this->blankPixels = !this->blankPixels;
-    memcpy(this->blankPixels ? this->black : this->paintingColor, this->currentColor, 3);
+    memcpy(this->currentColor, this->blankPixels ? this->black : this->paintingColor, 3);
     if(this->blankPixels) {
       this->counter--;
     }
@@ -135,7 +158,21 @@ bool RgbAnimations::race() {
   return this->counter == 0;
 }
 
-bool RgbAnimations::circle(bool debug) {
+bool RgbAnimations::circleColor() {
+  for(unsigned int ii=0;ii < this->ledCount;ii++) {
+    this->setColorRGB(ii, this->backgroundColor);
+  }
+  this->setColorRGB(this->currentPixel, this->currentColor);
+
+  this->currentPixel++;
+  if(this->currentPixel == this->ledCount) {
+    this->currentPixel = 0;
+    this->counter--;
+  }
+  return this->counter == 0;
+}
+
+bool RgbAnimations::circle() {
   for(unsigned int ii=0;ii < this->ledCount;ii++) {
     this->setColorRGB(ii, this->black);
   }
@@ -184,17 +221,34 @@ bool RgbAnimations::theaterChaseRainbow() {
 
 }
 
-unsigned int RgbAnimations::Wheel(char WeelPos) {
-
+uint32_t RgbAnimations::wheel(byte WheelPos) {
+  WheelPos = 255 - WheelPos;
+  if(WheelPos < 85) {
+    return COLOR(255 - WheelPos * 3, 0, WheelPos * 3);
+  }
+  if(WheelPos < 170) {
+    WheelPos -= 85;
+    return COLOR(0, WheelPos * 3, 255 - WheelPos * 3);
+  }
+  WheelPos -= 170;
+  return COLOR(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 
-bool RgbAnimations::run(bool debug) {
-  bool result;
+bool RgbAnimations::run() {
+  bool result = false;
   switch(this->currentAnimation) {
     case 0:
+      result = this->race();
+      break;
     case 1:
+      result = this->circle();
+      break;
     case 2:
+      result = this->bounceCircle();
+      break;
     case 3:
+      result = this->circleColor();
+      break;
     case 4:
     case 5:
     case 6:
@@ -207,13 +261,11 @@ bool RgbAnimations::run(bool debug) {
     case 13:
     case 14:
     case 15:
-    default:
-      result = this->circle(debug);
-      break;
+    break;
   }
   this->render();
   if(result) {
-    this->selectAnimation(debug);
+    this->selectAnimation();
   }
   //this->select
   return result;

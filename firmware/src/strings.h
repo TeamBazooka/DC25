@@ -2,7 +2,7 @@
 #ifndef __STRINGS_H
 #define __STRINGS_H
 
-#define STR_COUNT 63
+#define STR_COUNT 62
 #define FSLASH (char) 0x8c
 const char string1[] PROGMEM = "Make Science Mad Again!";
 const char string2[] PROGMEM = "Are you still there?";

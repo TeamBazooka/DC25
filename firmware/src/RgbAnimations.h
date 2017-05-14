@@ -12,6 +12,11 @@
 #define PORT_PIN      (PORTD2)    // Digital pin's bit position
 #define NUM_BITS      (8)         // Constant value: bits per byte
 
+#define COLOR(r, g, b) (((uint32_t)(r) << 16) | ((uint32_t)(g) <<  8) | (b))
+#define COLOR_R(r)     ((uint8_t)(0xff0000 & (r)) >> 16)
+#define COLOR_G(g)     ((uint8_t)(0x00ff00 & (g)) >> 8)
+#define COLOR_B(b)     ((uint8_t)(0x0000ff & (b)))
+
 class RgbAnimations {
   private:
   unsigned int currentAnimation;
@@ -38,6 +43,7 @@ class RgbAnimations {
   uint8_t black[3] = { 0, 0, 0 };
   uint8_t currentColor[3];
   uint8_t paintingColor[3];
+  uint8_t backgroundColor[3];
   bool blankPixels;
   unsigned int counter;
 
@@ -45,19 +51,22 @@ class RgbAnimations {
   uint8_t* rgb_arr;
   uint32_t t_f;
   void setColorRGB(uint8_t idx, uint8_t *color);
+  void setColorRGBInt(uint8_t idx, uint32_t color);
+  uint32_t readColorRGBInt(uint8_t idx);
   void render();
 
-  void selectColor(bool debug);
-  unsigned int Wheel(char WeelPos);
+  void selectColor();
+  uint32_t wheel(byte WheelPos);
   bool race();
-  bool circle(bool debug);
+  bool circle();
+  bool circleColor();
   bool bounceCircle();
   bool theaterChase();
   bool theaterChaseRainbow();
   public:
   RgbAnimations();
-  void selectAnimation(bool debug);
-  bool run(bool debug);
+  void selectAnimation();
+  bool run();
 };
 
 #endif
