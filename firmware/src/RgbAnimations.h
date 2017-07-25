@@ -65,6 +65,9 @@ class RgbAnimations {
   bool bounceCircle();
   bool theaterChase();
   bool theaterChaseRainbow();
+  bool randomFlash();
+  bool randomFlashColor();
+  bool randomFlashMultiple();
   public:
   RgbAnimations(long now);
   void selectAnimation();

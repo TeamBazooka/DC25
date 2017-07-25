@@ -137,7 +137,7 @@ void RgbAnimations::selectColor() {
 }
 
 void RgbAnimations::selectAnimation() {
-  this->currentAnimation = random(0, 4);
+  this->currentAnimation = random(0, 15);
   this->selectColor();
   this->currentPixel = 0;
   this->blankPixels = false;
@@ -223,6 +223,81 @@ bool RgbAnimations::theaterChaseRainbow() {
 
 }
 
+unsigned int count = 0;
+#define MAX_FLASH_COUNT 10000
+
+bool RgbAnimations::randomFlash() {
+  if(this->delay <= 0) {
+    this->currentPixel = random(0, this->ledCount);
+    this->delay = 50;
+  }
+  this->delay--;
+  for(unsigned int ii=0;ii < this->ledCount;ii++) {
+    this->setColorRGB(ii, this->black);
+  }
+  if(this->delay > 0) {
+    this->setColorRGB(this->currentPixel, this->currentColor);
+  }
+  count++;
+  if(count >= MAX_FLASH_COUNT) {
+    count = 0;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool RgbAnimations::randomFlashColor() {
+  if(this->delay <= 0) {
+    this->currentPixel = random(0, this->ledCount);
+    this->delay = 50;
+  }
+  this->delay--;
+  for(unsigned int ii=0;ii < this->ledCount;ii++) {
+    this->setColorRGB(ii, this->backgroundColor);
+  }
+  if(this->delay > 0) {
+    this->setColorRGB(this->currentPixel, this->currentColor);
+  }
+  count++;
+  if(count >= MAX_FLASH_COUNT) {
+    count = 0;
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool flash = false;
+unsigned int flashCount = 3;
+
+bool RgbAnimations::randomFlashMultiple() {
+  if(this->delay <= 0) {
+    if(flashCount == 0) {
+      this->currentPixel = random(0, this->ledCount);
+      flashCount = 3;
+    } else {
+      flashCount--;
+    }
+    this->delay = 150;
+    flash = !flash;
+  }
+  this->delay--;
+  for(unsigned int ii=0;ii < this->ledCount;ii++) {
+    this->setColorRGB(ii, this->black);
+  }
+  if(this->delay > 0 && flash) {
+    this->setColorRGB(this->currentPixel, this->currentColor);
+  }
+  count++;
+  if(count >= MAX_FLASH_COUNT * 2) {
+    count = 0;
+    return true;
+  } else {
+    return false;
+  }
+}
+
 uint32_t RgbAnimations::wheel(byte WheelPos) {
   WheelPos = 255 - WheelPos;
   if(WheelPos < 85) {
@@ -237,7 +312,8 @@ uint32_t RgbAnimations::wheel(byte WheelPos) {
 }
 
 void RgbAnimations::run(long now) {
-  if(now - this->time >= this->delay) {
+  if(this->currentAnimation >=4 ||
+  (now - this->time >= this->delay)) {
     this->time = now;
     bool result = false;
     switch(this->currentAnimation) {
@@ -254,7 +330,11 @@ void RgbAnimations::run(long now) {
         result = this->circleColor();
         break;
       case 4:
+        result = this->randomFlash();
+        break;
       case 5:
+        result = this->randomFlashColor();
+        break;
       case 6:
       case 7:
       case 8:
@@ -265,7 +345,8 @@ void RgbAnimations::run(long now) {
       case 13:
       case 14:
       case 15:
-      break;
+        result = this->randomFlashMultiple();
+        break;
     }
     this->render();
     if(result) {

@@ -4,24 +4,21 @@
 #include "Lcd.h"
 
 Lcd *lcd;
-
 RgbAnimations *animations;
-unsigned int rgbDelay = 50;
 
-long rgbTime;
-long lcdTime;
+long now;
 
 void setup() {
-  randomSeed(0xCAFEF00D);
+  randomSeed(0xDEADBEEF);
 
-  long now = millis();
+  now = millis();
 
   animations = new RgbAnimations(now);
   lcd = new Lcd(now);
 }
 
 void loop() {
-  long now = millis();
+  now = millis();
   animations->run(now);
   lcd->run(now);
 }
