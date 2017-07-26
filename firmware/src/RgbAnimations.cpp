@@ -332,29 +332,29 @@ bool RgbAnimations::run(long now, bool outsideSleep, bool wake) {
     bool result = false;
     switch(this->currentAnimation) {
       case 0:
+      case 1:
         result = this->race();
         break;
-      case 1:
+      case 2:
+      case 3:
         result = this->circle();
         break;
-      case 2:
-        result = this->bounceCircle();
-        break;
-      case 3:
-        result = this->circleColor();
-        break;
       case 4:
-        result = this->randomFlash();
-        break;
       case 5:
-        result = this->randomFlashColor();
+        result = this->bounceCircle();
         break;
       case 6:
       case 7:
+        result = this->circleColor();
+        break;
       case 8:
       case 9:
+        result = this->randomFlash();
+        break;
       case 10:
       case 11:
+        result = this->randomFlashColor();
+        break;
       case 12:
       case 13:
       case 14:
