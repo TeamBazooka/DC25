@@ -12,6 +12,7 @@ RgbAnimations::RgbAnimations(long now) {
 
   this->selectAnimation();
   this->ledCount = NUM_RGB;
+  this->sleep = false;
 }
 
 void RgbAnimations::setColorRGB(uint8_t idx, uint8_t *color) {
@@ -216,11 +217,11 @@ bool RgbAnimations::bounceCircle() {
 }
 
 bool RgbAnimations::theaterChase() {
-
+  return false;
 }
 
 bool RgbAnimations::theaterChaseRainbow() {
-
+  return false;
 }
 
 unsigned int count = 0;
@@ -311,7 +312,20 @@ uint32_t RgbAnimations::wheel(byte WheelPos) {
   return COLOR(WheelPos * 3, 255 - WheelPos * 3, 0);
 }
 
-void RgbAnimations::run(long now) {
+void RgbAnimations::clear() {
+  for(unsigned int ii=0;ii < this->ledCount;ii++) {
+    this->setColorRGB(ii, this->black);
+  }
+  this->render();
+}
+
+bool RgbAnimations::run(long now, bool outsideSleep, bool wake) {
+  if(wake) {
+    this->sleep = false;
+  }
+  if(this->sleep && !outsideSleep) {
+    this->sleep = false;
+  }
   if(this->currentAnimation >=4 ||
   (now - this->time >= this->delay)) {
     this->time = now;
@@ -351,6 +365,11 @@ void RgbAnimations::run(long now) {
     this->render();
     if(result) {
       this->selectAnimation();
+      this->sleep = true;
     }
   }
+  if(outsideSleep && this->sleep) {
+    this->clear();
+  }
+  return this->sleep;
 }

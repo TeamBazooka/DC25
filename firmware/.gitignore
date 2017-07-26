@@ -1,3 +1,4 @@
 *.hex
 .pioenvs
 .piolibdeps
+*.gch

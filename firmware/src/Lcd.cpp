@@ -14,12 +14,16 @@ Lcd::Lcd(long now) {
   }
   this->lineTwo->stop = 25;
   this->lineOne->stop = 20;
+
+  this->runcount = 0;
 }
 
 void Lcd::incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
   char thisChar;
   if(currentLine->stop != 0) {
-    currentLine->stop--;
+    if(this->runcount < 4) {
+      currentLine->stop--;
+    }
     cbPush(currentLine->cb);
   } else {
     memcpy_P(&thisChar, strings[currentLine->str] + (currentLine->ch * SIZECHAR), SIZECHAR);
@@ -27,6 +31,7 @@ void Lcd::incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
       cbPush(currentLine->cb, &thisChar);
       currentLine->ch++;
     } else {
+      this->runcount++;
       currentLine->str = RANDOM;
       while(currentLine->str == prevLine->str) {
         currentLine->str = RANDOM;
@@ -38,7 +43,10 @@ void Lcd::incrementLine(LineInfo *currentLine, LineInfo *prevLine) {
   }
 }
 
-void Lcd::run(long now) {
+bool Lcd::run(long now, bool wake) {
+  if(wake) {
+    this->runcount = 0;
+  }
   if(now - this->time >= LCD_DELAY) {
     this->time = now;
     this->incrementLine(this->lineOne, this->lineTwo);
@@ -61,4 +69,11 @@ void Lcd::run(long now) {
       }
     }
   }
+  bool returnVal = this->runcount >= 4
+    && lineEmpty(this->lineOne)
+    && lineEmpty(this->lineTwo);
+  if(returnVal) {
+    this->lcd->clear();
+  }
+  return returnVal;
 }

@@ -20,7 +20,7 @@
 class Lcd {
 public:
   Lcd(long now);
-  void run(long now);
+  bool run(long now, bool wake);
 
 
 private:
@@ -29,6 +29,7 @@ private:
   LineInfo *lineOne;
   LineInfo *lineTwo;
   LiquidCrystal *lcd;
+  unsigned int runcount;
 };
 
 #endif

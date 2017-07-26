@@ -6,15 +6,15 @@
 
 #define STR_COUNT 62
 #define FSLASH (char) 0x8c
-const char string1[] PROGMEM = "Make Science Mad Again!";
-const char string2[] PROGMEM = "Are you still there?";
-const char string3[] PROGMEM = "I said across her nose, not up it!";
-const char string4[] PROGMEM = "Can somebody just let me out of here? If I die in a cage I lose a bet.";
-const char string5[] PROGMEM = "Its time to get schwifty!";
-const char string6[] PROGMEM = "Wubbaladubdub!";
-const char string7[] PROGMEM = "Lando's not a man he's a dog!";
-const char string8[] PROGMEM = "Supplies!!!";
-const char string9[] PROGMEM = "Looks like I picked the wrong week to quit sniffing glue.";
+const char string1[]  PROGMEM = "Make Science Mad Again!";
+const char string2[]  PROGMEM = "Are you still there?";
+const char string3[]  PROGMEM = "I said across her nose, not up it!";
+const char string4[]  PROGMEM = "Can somebody just let me out of here? If I die in a cage I lose a bet.";
+const char string5[]  PROGMEM = "Its time to get schwifty!";
+const char string6[]  PROGMEM = "Wubbaladubdub!";
+const char string7[]  PROGMEM = "Lando's not a man he's a dog!";
+const char string8[]  PROGMEM = "Supplies!!!";
+const char string9[]  PROGMEM = "Looks like I picked the wrong week to quit sniffing glue.";
 const char string10[] PROGMEM = "Good luck, we're all counting on you";
 const char string11[] PROGMEM = "Sir, the possibility of successfully navigating an asteroid field is approximately 3,720 to 1.";
 const char string12[] PROGMEM = "Meesa all sparkly glowy!";

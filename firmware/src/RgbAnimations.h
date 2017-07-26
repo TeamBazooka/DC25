@@ -48,6 +48,7 @@ class RgbAnimations {
   uint8_t backgroundColor[3];
   bool blankPixels;
   unsigned int counter;
+  bool sleep;
 
 
   uint8_t* rgb_arr;
@@ -59,6 +60,7 @@ class RgbAnimations {
 
   void selectColor();
   uint32_t wheel(byte WheelPos);
+  void clear();
   bool race();
   bool circle();
   bool circleColor();
@@ -71,7 +73,7 @@ class RgbAnimations {
   public:
   RgbAnimations(long now);
   void selectAnimation();
-  void run(long now);
+  bool run(long now, bool outsideSleep, bool wake);
 };
 
 #endif
